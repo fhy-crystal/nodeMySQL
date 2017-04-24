@@ -31,10 +31,10 @@
 					data: JSON.stringify(info),
 				})
 				.done(function(data) {
-					if (data) {
-						$('#editId').html(data[0].id);
-						$('#name').val(data[0].name);
-						$('#age').val(data[0].age);
+					if (data.result) {
+						$('#editId').html(data.result[0].id);
+						$('#name').val(data.result[0].name);
+						$('#age').val(data.result[0].age);
 					}
 				})
 				.fail(function() {

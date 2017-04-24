@@ -66,7 +66,12 @@ app.get('/query', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				reponseBody = {
+					status: 0,
+					msg: '操作成功',
+					result: result
+				};
+				responseJSON(res, reponseBody);
 			}
 			connection.release();
 		})
@@ -83,7 +88,12 @@ app.post('/queryone', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				reponseBody = {
+					status: 0,
+					msg: '操作成功',
+					result: result
+				};
+				responseJSON(res, reponseBody);
 			}
 			connection.release();
 		})
@@ -124,7 +134,12 @@ app.post('/updateTest', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				reponseBody = {
+					status: 0,
+					msg: '操作成功',
+					result: result
+				};
+				responseJSON(res, reponseBody);
 			}
 			connection.release();
 		})

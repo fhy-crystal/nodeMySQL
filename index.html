@@ -70,11 +70,11 @@
 				})
 				.done(function(data) {
 					var disTable = $('#displayTable');
-					if (data && data.length > 0) {
+					if (data.result && data.result.length > 0) {
 						disTable.empty();
 						var $tr = '';
-						for (var i = 0; i < data.length; i++) {
-							$tr = $('<tr><td style="text-align:center">' + data[i].id + '</td><td style="text-align:center">' + data[i].name + '</td><td style="text-align:center">' + data[i].age + '</td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data[i].id + '" class="delete">delete</a></td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data[i].id + '" class="edit">edit</a></td></tr>');
+						for (var i = 0; i < data.result.length; i++) {
+							$tr = $('<tr><td style="text-align:center">' + data.result[i].id + '</td><td style="text-align:center">' + data.result[i].name + '</td><td style="text-align:center">' + data.result[i].age + '</td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.result[i].id + '" class="delete">delete</a></td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.result[i].id + '" class="edit">edit</a></td></tr>');
 							disTable.append($tr);
 						}
 
