@@ -21,6 +21,14 @@ app.all('*', function(req, res, next) {
 	next();
 });
 
+var responseJSON = function (res, result) {
+	if(typeof res === 'undefined') { 
+		res.json({status:'-200', msg: '操作失败'}); 
+    } else { 
+		res.json(result);
+	}
+};
+
 // 创建一个连接池
 var pool = mysql.createPool(dbConfig.mysql);
 
@@ -37,7 +45,11 @@ app.post('/postTest', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				result = {
+					status: 0,
+					msg: '操作成功'
+				};
+				responseJSON(res, result);
 			}
 			// 释放连接
 			connection.release();
@@ -88,8 +100,13 @@ app.post('/deleteTest', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				result = {
+					status: 0,
+					msg: '操作成功'
+				};
+				responseJSON(res, result);
 			}
+			// 释放连接
 			connection.release();
 		})
 	})
@@ -122,8 +139,13 @@ app.get('/reset', function(req, res) {
 				console.log(err);
 			}
 			if (result) {
-				res.end(JSON.stringify(result));
+				result = {
+					status: 0,
+					msg: '操作成功'
+				};
+				responseJSON(res, result);
 			}
+			// 释放连接
 			connection.release();
 		})
 	})
@@ -139,35 +161,3 @@ var server = app.listen(8081, function () {
 	console.log("应用实例，访问地址为 http://%s:%s", host, port);
 
 })
-
-// var connection = mysql.createConnection({
-// 	host: 'localhost',
-// 	user: 'root',
-// 	password: 'root',
-// 	database: 'nodeMysqlDB',
-// 	port: 3306
-// });
-
-// connection.connect(function(err) {
-// 	if (err) {
-// 		console.log('连接失败');
-// 		throw(err);
-// 	} else {
-// 		console.log('连接成功');
-		
-// 	}
-// });
-
-// var table = 'create table if not exists person(id int,name varchar(255),age int(9))'
-// connection.query(table, function(err,result) {
-// 	if (err) {
-// 		console.log("创建表失败");
-// 		console.log(err);
-// 	} else {
-// 		console.log("创建表成功");
-// 	}
-// })
-
-// connection.end(function() {
-// 	console.log('已关闭');
-// });
