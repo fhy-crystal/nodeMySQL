@@ -24,17 +24,17 @@
 			// 查询单个信息
 			function queryOne(info) {
 				$.ajax({
-					url: 'http://localhost:8081/queryone',
+					url: 'http://localhost:8081/edit/queryone',
 					type: 'POST',
 					dataType: 'JSON',
 					contentType: "application/json; charset=utf-8",
 					data: JSON.stringify(info),
 				})
 				.done(function(data) {
-					if (data.result) {
-						$('#editId').html(data.result[0].id);
-						$('#name').val(data.result[0].name);
-						$('#age').val(data.result[0].age);
+					if (data.data) {
+						$('#editId').html(data.data[0].id);
+						$('#name').val(data.data[0].name);
+						$('#age').val(data.data[0].age);
 					}
 				})
 				.fail(function() {
@@ -51,7 +51,7 @@
 					'age': parseInt($('#age').val())
 				};
 				$.ajax({
-					url: 'http://localhost:8081/updateTest',
+					url: 'http://localhost:8081/edit/update',
 					type: 'POST',
 					dataType: 'JSON',
 					contentType: "application/json; charset=utf-8",

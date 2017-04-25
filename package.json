@@ -1,0 +1,23 @@
+{
+  "name": "nodeMySQL",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "mysql": "^2.13.0",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fhy-crystal/nodeMySQL.git"
+  },
+  "keywords": ["node", "express", "mysql"],
+  "author": "fhy-crystal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fhy-crystal/nodeMySQL/issues"
+  },
+  "homepage": "https://github.com/fhy-crystal/nodeMySQL#readme"
+}

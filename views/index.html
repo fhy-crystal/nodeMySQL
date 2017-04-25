@@ -44,7 +44,7 @@
 					'age': parseInt($('#age').val())
 				};
 				$.ajax({
-					url: 'http://localhost:8081/postTest',
+					url: 'http://localhost:8081/add',
 					type: 'POST',
 					dataType: 'JSON',
 					contentType: "application/json; charset=utf-8",
@@ -60,6 +60,7 @@
 				});
 			});
 
+			// 查询所有并绘制表格
 			function refreshData() {
 				$.ajax({
 					url: 'http://localhost:8081/query',
@@ -70,11 +71,11 @@
 				})
 				.done(function(data) {
 					var disTable = $('#displayTable');
-					if (data.result && data.result.length > 0) {
+					if (data.data && data.data.length > 0) {
 						disTable.empty();
 						var $tr = '';
-						for (var i = 0; i < data.result.length; i++) {
-							$tr = $('<tr><td style="text-align:center">' + data.result[i].id + '</td><td style="text-align:center">' + data.result[i].name + '</td><td style="text-align:center">' + data.result[i].age + '</td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.result[i].id + '" class="delete">delete</a></td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.result[i].id + '" class="edit">edit</a></td></tr>');
+						for (var i = 0; i < data.data.length; i++) {
+							$tr = $('<tr><td style="text-align:center">' + data.data[i].id + '</td><td style="text-align:center">' + data.data[i].name + '</td><td style="text-align:center">' + data.data[i].age + '</td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.data[i].id + '" class="delete">delete</a></td><td style="text-align:center"><a style="cursor:pointer;color:blue" data-id="' + data.data[i].id + '" class="edit">edit</a></td></tr>');
 							disTable.append($tr);
 						}
 
@@ -85,7 +86,7 @@
 							};
 							console.log(postBody);
 							$.ajax({
-								url: 'http://localhost:8081/deleteTest',
+								url: 'http://localhost:8081/delete',
 								type: 'POST',
 								dataType: 'JSON',
 								contentType: "application/json; charset=utf-8",
@@ -99,7 +100,7 @@
 							});
 						});
 
-						// 编辑
+						// 编辑，跳转页面
 						$('.edit').click(function() {
 							window.location.href = 'edit.html?id=' + $(this).attr('data-id');
 						});

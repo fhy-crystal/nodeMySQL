@@ -1,15 +1,10 @@
-var mysql = require('mysql');
-// 引入数据库配置文件
-var dbConfig = require('./DBconfig.js');
-// 引入sql语句
-var useSql = require('./sqlConfig.js');
+// 引入路由文件
+var index = require('./routes/index.js');
+var edit = require('./routes/edit.js');
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-
-// json编码
-app.use(bodyParser.json());
 
 //设置跨域访问
 app.all('*', function(req, res, next) {
@@ -21,150 +16,29 @@ app.all('*', function(req, res, next) {
 	next();
 });
 
-var responseJSON = function (res, result) {
-	if(typeof res === 'undefined') { 
-		res.json({status:'-200', msg: '操作失败'}); 
-    } else { 
-		res.json(result);
-	}
-};
+// json编码
+app.use(bodyParser.json());
 
-// 创建一个连接池
-var pool = mysql.createPool(dbConfig.mysql);
+app.use('/', index); // 当路径为'/'，即'http://localhost:8081/'时，匹配index.js
+app.use('/edit', edit); // 当路径为'/edit',即'http://localhost:8081/edit'时，匹配edit.js
 
-// 插入数据
-app.post('/postTest', function(req, res) {
-	// req.body 获取json格式传递的参数
-	console.log(req.body);
-	pool.getConnection(function(err, connection) {
-		var param = req.body;
-		// 建立连接，插入数据
-		connection.query(useSql.insert, [param], function(err, result) {
-			if (err) {
-				console.log("插入失败");
-				console.log(err);
-			}
-			if (result) {
-				result = {
-					status: 0,
-					msg: '操作成功'
-				};
-				responseJSON(res, result);
-			}
-			// 释放连接
-			connection.release();
-		})
-	})
+// 匹配404，即路径未匹配时
+app.use(function(req, res, next) {
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 })
 
-// 查询所有
-app.get('/query', function(req, res) {
-	pool.getConnection(function(err, connection) {
-		connection.query(useSql.queryAll, function(err, result) {
-			if (err) {
-				console.log('查询失败');
-				console.log(err);
-			}
-			if (result) {
-				reponseBody = {
-					status: 0,
-					msg: '操作成功',
-					result: result
-				};
-				responseJSON(res, reponseBody);
-			}
-			connection.release();
-		})
-	})
-})
+// 当路径匹配错误时
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-// 查询单个
-app.post('/queryone', function(req, res) {
-	pool.getConnection(function(err, connection) {
-		var param = req.body;
-		connection.query(useSql.queryOne, [param.id], function(err, result) {
-			if (err) {
-				console.log('查询失败');
-				console.log(err);
-			}
-			if (result) {
-				reponseBody = {
-					status: 0,
-					msg: '操作成功',
-					result: result
-				};
-				responseJSON(res, reponseBody);
-			}
-			connection.release();
-		})
-	})
-})
-
-// 删除
-app.post('/deleteTest', function(req, res) {
-	pool.getConnection(function(err, connection) {
-		var param = req.body;
-		connection.query(useSql.delete, [param.id], function(err, result) {
-			if (err) {
-				console.log('删除失败');
-				console.log(err);
-			}
-			if (result) {
-				result = {
-					status: 0,
-					msg: '操作成功'
-				};
-				responseJSON(res, result);
-			}
-			// 释放连接
-			connection.release();
-		})
-	})
-})
-
-// 更新
-app.post('/updateTest', function(req, res) {
-	pool.getConnection(function(err, connection) {
-		var param = req.body;
-		var id = param.id;
-		delete param.id; // 删除id属性
-		connection.query(useSql.update, [param, id], function(err, result) {
-			if (err) {
-				console.log('更新失败');
-				console.log(err);
-			}
-			if (result) {
-				reponseBody = {
-					status: 0,
-					msg: '操作成功',
-					result: result
-				};
-				responseJSON(res, reponseBody);
-			}
-			connection.release();
-		})
-	})
-})
-
-app.get('/reset', function(req, res) {
-	pool.getConnection(function(err, connection) {
-		connection.query(useSql.reset, function(err, result) {
-			if (err) {
-				console.log('重置失败');
-				console.log(err);
-			}
-			if (result) {
-				result = {
-					status: 0,
-					msg: '操作成功'
-				};
-				responseJSON(res, result);
-			}
-			// 释放连接
-			connection.release();
-		})
-	})
-})
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 
 //监听8081接口打印请求域名和端口
