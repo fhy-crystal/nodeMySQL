@@ -31,10 +31,14 @@
 					data: JSON.stringify(info),
 				})
 				.done(function(data) {
-					if (data.data) {
-						$('#editId').html(data.data[0].id);
-						$('#name').val(data.data[0].name);
-						$('#age').val(data.data[0].age);
+					if (data.status == 0) {
+						if (data.data && data.data.length > 0) {
+							$('#editId').html(data.data[0].id);
+							$('#name').val(data.data[0].name);
+							$('#age').val(data.data[0].age);
+						}
+					} else {
+						console.log(data.msg);
 					}
 				})
 				.fail(function() {
@@ -58,7 +62,11 @@
 					data: JSON.stringify(postBody),
 				})
 				.done(function(data) {
-					window.location.href = 'index.html';
+					if (data.status == 0) {
+						window.location.href = 'index.html';
+					} else {
+						console.log(data.msg);
+					}
 				})
 				.fail(function() {
 					console.log("保存失败");
